@@ -7,7 +7,7 @@
 
   outputs = inputs@{ self, nixpkgs, flake-parts, ... }:
     let
-      unroot = n: v: { n = v.root; };
+      unroot = n: v: { name = n; value = v.root; };
       gogolPackages = pkgs: lib:
         let
           toPackage = file: _: {
