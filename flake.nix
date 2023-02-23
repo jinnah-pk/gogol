@@ -7,6 +7,7 @@
 
   outputs = inputs@{ self, nixpkgs, flake-parts, ... }:
     let
+      unroot = n: v: { n = v.root; };
       gogolPackages = pkgs: lib:
         let
           toPackage = file: _: {
@@ -50,7 +51,7 @@
       };
       flake.haskellFlakeProjectModules = {
         output = { pkgs, lib, ... }: {
-          source-overrides = gogolPackages pkgs lib;
+          source-overrides = lib.mapAttrs' unroot (gogolPackages pkgs lib);
         };
       };
     };
