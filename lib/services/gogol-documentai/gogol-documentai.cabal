@@ -1,0 +1,81 @@
+cabal-version:         2.2
+name:                  gogol-documentai
+version:               1.0.0
+synopsis:              Google Cloud Document AI SDK.
+homepage:              https://github.com/brendanhay/gogol
+bug-reports:           https://github.com/brendanhay/gogol/issues
+license:               MPL-2.0
+license-file:          LICENSE
+author:                Brendan Hay
+maintainer:            Brendan Hay <brendan.g.hay+gogol@gmail.com>
+copyright:             Copyright (c) 2015-2022 Brendan Hay
+category:              Google
+build-type:            Simple
+extra-source-files:    README.md src/.gitkeep
+description:
+    Service to parse structured information from unstructured or semi-structured documents using state-of-the-art Google AI such as natural language, computer vision, translation, and AutoML.
+  .
+  /Warning:/ This is an experimental prototype/preview release which is still
+  under exploratory development and not intended for public use, caveat emptor!
+  .
+  This library is compatible with version @v1beta3@
+  of the API.
+
+source-repository head
+  type:     git
+  location: git://github.com/brendanhay/gogol.git
+  subdir:   gogol-documentai
+
+flag field-selectors
+  description: If record field selectors should be enabled. Disabling this requires GHC >=9.2 and the NoFieldSelectors extension.
+  default: False
+  manual: True
+
+library
+  default-language:  Haskell2010
+  hs-source-dirs:    src gen
+
+  ghc-options:
+    -Wall
+    -fwarn-incomplete-uni-patterns
+    -fwarn-incomplete-record-updates
+    -funbox-strict-fields
+    -fwarn-unused-packages
+
+  if !flag(field-selectors) && impl(ghc >= 9.2)
+    default-extensions: NoFieldSelectors
+
+  exposed-modules:
+      Gogol.DocumentAI
+    , Gogol.DocumentAI.Projects.Locations.FetchProcessorTypes
+    , Gogol.DocumentAI.Projects.Locations.Get
+    , Gogol.DocumentAI.Projects.Locations.List
+    , Gogol.DocumentAI.Projects.Locations.Operations.Cancel
+    , Gogol.DocumentAI.Projects.Locations.Operations.Get
+    , Gogol.DocumentAI.Projects.Locations.Operations.List
+    , Gogol.DocumentAI.Projects.Locations.Processors.BatchProcess
+    , Gogol.DocumentAI.Projects.Locations.Processors.Create
+    , Gogol.DocumentAI.Projects.Locations.Processors.Delete
+    , Gogol.DocumentAI.Projects.Locations.Processors.Disable
+    , Gogol.DocumentAI.Projects.Locations.Processors.Enable
+    , Gogol.DocumentAI.Projects.Locations.Processors.Get
+    , Gogol.DocumentAI.Projects.Locations.Processors.HumanReviewConfig.ReviewDocument
+    , Gogol.DocumentAI.Projects.Locations.Processors.List
+    , Gogol.DocumentAI.Projects.Locations.Processors.Process
+    , Gogol.DocumentAI.Projects.Locations.Processors.ProcessorVersions.BatchProcess
+    , Gogol.DocumentAI.Projects.Locations.Processors.ProcessorVersions.Delete
+    , Gogol.DocumentAI.Projects.Locations.Processors.ProcessorVersions.Deploy
+    , Gogol.DocumentAI.Projects.Locations.Processors.ProcessorVersions.Get
+    , Gogol.DocumentAI.Projects.Locations.Processors.ProcessorVersions.List
+    , Gogol.DocumentAI.Projects.Locations.Processors.ProcessorVersions.Process
+    , Gogol.DocumentAI.Projects.Locations.Processors.ProcessorVersions.Undeploy
+    , Gogol.DocumentAI.Projects.Locations.Processors.SetDefaultProcessorVersion
+    , Gogol.DocumentAI.Types
+
+  other-modules:
+      Gogol.DocumentAI.Internal.Product
+    , Gogol.DocumentAI.Internal.Sum
+
+  build-depends:
+      gogol-core ^>= 1.0.0
+    , base       >=  4.12 && < 5
