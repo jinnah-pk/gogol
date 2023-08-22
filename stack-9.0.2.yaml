@@ -86,6 +86,7 @@ packages:
   - lib/services/gogol-dlp
   - lib/services/gogol-dns
   - lib/services/gogol-docs
+  - lib/services/gogol-documentai
   - lib/services/gogol-doubleclick-bids
   - lib/services/gogol-doubleclick-search
   - lib/services/gogol-drive

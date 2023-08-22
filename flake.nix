@@ -6,37 +6,12 @@
   };
 
   outputs = inputs@{ self, nixpkgs, flake-parts, ... }:
-    let
-      unroot = n: v: { name = n; value = v.root; };
-      gogolPackages = pkgs: lib:
-        let
-          toPackage = file: _: {
-            name = file;
-            value = { root = ./lib/services/${file}; };
-          };
-
-          isDir = _: x: x == "directory";
-          svcs = pkgs.lib.mapAttrs' toPackage
-            (lib.attrsets.filterAttrs isDir (builtins.readDir ./lib/services));
-          gogol = {
-            gogol.root = ./lib/gogol;
-            gogol-core.root = ./lib/gogol-core;
-          };
-        in lib.attrsets.recursiveUpdate gogol svcs;
-    in flake-parts.lib.mkFlake { inherit inputs; } {
+    flake-parts.lib.mkFlake { inherit inputs; } {
       systems = nixpkgs.lib.systems.flakeExposed;
       imports = [ inputs.haskell-flake.flakeModule ];
       perSystem = { self', inputs', pkgs, system, lib, ... }: {
-        # Most simple configuration requires only:
-        # haskellProjects.default = { };
-
         haskellProjects.default = {
-          # Haskell dependency overrides go here
-          # overrides = self: super: {
-          # };
-          # hlsCheck = false;
-          # hlintCheck = true;
-          packages = gogolPackages pkgs lib;
+          projectRoot = ./.;
           devShell.tools = hp: {
             cabal-fmt = hp.cabal-fmt;
             nixpkgs-fmt = pkgs.nixpkgs-fmt;
@@ -49,11 +24,5 @@
         };
         packages.default = self'.packages.gogol;
       };
-      flake.haskellFlakeProjectModules = {
-        output = { pkgs, lib, ... }: {
-          source-overrides = lib.mapAttrs' unroot (gogolPackages pkgs lib);
-        };
-      };
     };
-
 }
